@@ -16,8 +16,15 @@ app.use(cookieParser())
 app.use(compress())
 // secure apps by setting various HTTP headers
 app.use(helmet())
-// enable CORS - Cross Origin Resource Sharing
-app.use(cors())
+
+
+// Cấu hình CORS
+const corsOptions = {
+    origin: 'http://localhost:4000', // URL của frontend
+    credentials: true, // Cho phép cookie
+};
+app.use(cors(corsOptions));
+
 
 app.get('/', (req, res) => { res.status(200).send(Template()) })
 
@@ -31,6 +38,8 @@ app.use((err, req, res, next) => {
         console.log(err)
     }
 })
+
+
 
 
 

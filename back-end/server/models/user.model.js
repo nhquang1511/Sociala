@@ -16,15 +16,16 @@ const UserSchema = new mongoose.Schema({
     },
     created: {
         type:
-            Date, default:
-            Date.now
+            Date, 
+            default: Date.now
     },
     updated: Date,
     hashed_password: {// represent the encrypted user password 
         type: String,
         required: "Password is required"
     },
-    salt: String
+    salt: String,
+    
 })
 // tạo thuộc tính ảo virtual cho password chỉ tồn tại trong quá trình sử lý dữ liệu
 UserSchema
