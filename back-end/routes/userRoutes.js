@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const upload = require('../middlewares/upload');
+const upload = require('../config/multerConfig');
 const authenticateToken = require('../middlewares/authenticateToken');
 // Lấy danh sách tất cả người dùng
 router.get('/', userController.getAllUsers);

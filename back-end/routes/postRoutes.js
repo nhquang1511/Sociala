@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../middlewares/upload');
+const upload = require('../config/multerConfig');
 const postController = require('../controllers/postController');
 const authenticateToken = require('../middlewares/authenticateToken');
 

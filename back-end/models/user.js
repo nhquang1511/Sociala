@@ -4,11 +4,9 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    name: { type: String },
-    avatar: {
-        data: Buffer,
-        contentType: String
-    },
+    avatar: { type: String },
+    dateOfBirth: { type: Date },  // Thuộc tính ngày sinh
+    gender: { type: String, enum: ['male', 'female', 'other'] }  // Thuộc tính giới tính
 });
 
 module.exports = mongoose.model('User', userSchema);

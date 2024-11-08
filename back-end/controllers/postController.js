@@ -11,21 +11,21 @@ exports.createPost = async (req, res) => {
         if (!content) {
             return res.status(400).json({ message: 'Content is required' });
         }
+
+        let imageUrl = null;
+        if (req.file) { // Kiểm tra nếu có file được tải lên
+            imageUrl = req.file.path; // URL trả về từ Cloudinary qua multer
+        }
         // Tạo bài viết mới
         const newPost = new Post({
             userId,
             content,
-            image,
+            image: imageUrl,
             video,
             visibility
         });
-        // Cập nhật image nếu có file upload
-        if (req.file) {
-            newPost.image = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            };
-        }
+        
+          
 
         
 
@@ -207,13 +207,12 @@ exports.editPost = async (req, res) => {
         post.content = content || post.content; // Nếu không cung cấp, giữ nguyên giá trị cũ
         post.video = video || post.video;
         post.visibility = visibility || post.visibility;
-        // Cập nhật image nếu có file upload
-        if (req.file) {
-            post.image = {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            };
+
+        let imageUrl = null;
+        if (req.file) { // Kiểm tra nếu có file được tải lên
+            imageUrl = req.file.path; // URL trả về từ Cloudinary qua multer
         }
+        post.image = imageUrl || post.video;
         // Cập nhật thời gian sửa đổi
         post.updatedAt = Date.now();
 

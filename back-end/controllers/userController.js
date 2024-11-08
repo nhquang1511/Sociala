@@ -5,21 +5,32 @@ const jwt = require('jsonwebtoken');
 // Đăng ký người dùng mới
 exports.register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, avatar, dateOfBirth, gender } = req.body;
 
     // Kiểm tra xem email đã tồn tại chưa
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: 'Email already exists' });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
 
     // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Tạo người dùng mới
-    const newUser = new User({ username, email, password: hashedPassword });
+    // Tạo người dùng mới với các thông tin bổ sung
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      avatar,
+      dateOfBirth,
+      gender
+    });
+    
     await newUser.save();
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Server error', error });
   }
 };
@@ -79,10 +90,7 @@ exports.updateUser = async (req, res) => {
 
     // Cập nhật avatar nếu có file upload
     if (req.file) {
-      user.avatar = {
-        data: req.file.buffer,
-        contentType: req.file.mimetype
-      };
+      user.avatar = req.file.path
     }
 
     // Lưu thông tin đã cập nhật
