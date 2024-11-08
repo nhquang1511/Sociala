@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const friendRoutes = require('./routes/friendRoutes');
+const postRoutes = require('./routes/postRoutes');
+
 const mongoose = require('mongoose');
 
 
@@ -35,6 +37,8 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api', groupRoutes);
 app.use('/api/friends', friendRoutes);
+app.use('/api/posts', postRoutes);
+
 // Khởi động server
 app.listen(PORT, () => {
    console.log(`Server is running on http://localhost:${PORT}`);
