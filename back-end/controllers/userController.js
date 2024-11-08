@@ -132,15 +132,3 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-
-exports.getUserAvatar = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user || !user.avatar.data) return res.status(404).json({ message: 'Avatar not found' });
-
-    res.set('Content-Type', user.avatar.contentType);
-    res.send(user.avatar.data);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
-};

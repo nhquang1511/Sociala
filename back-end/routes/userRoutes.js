@@ -21,6 +21,5 @@ router.put('/:id',authenticateToken ,upload.single('avatar'), userController.upd
 // Xóa người dùng theo ID
 router.delete('/:id',authenticateToken, userController.deleteUser);
 
-router.get('/:id/avatar', userController.getUserAvatar);
 
 module.exports = router;
