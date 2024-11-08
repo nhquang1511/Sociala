@@ -6,12 +6,11 @@ exports.createPost = async (req, res) => {
     try {
         const { content, image, video, visibility } = req.body;
         const userId = req.userId; // Lấy userId từ middleware xác thực
-        
+
         // Kiểm tra nếu nội dung bài viết không có
         if (!content) {
             return res.status(400).json({ message: 'Content is required' });
         }
-
         // Tạo bài viết mới
         const newPost = new Post({
             userId,
@@ -20,6 +19,15 @@ exports.createPost = async (req, res) => {
             video,
             visibility
         });
+        // Cập nhật image nếu có file upload
+        if (req.file) {
+            newPost.image = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            };
+        }
+
+        
 
         // Lưu bài viết vào cơ sở dữ liệu
         await newPost.save();
@@ -42,7 +50,7 @@ exports.getUserPosts = async (req, res) => {
                 { userId: userId, visibility: 'friends' } // Bài viết bạn bè
             ]
         }).populate('userId', 'username') // Lấy thông tin người đăng bài viết
-        .sort({ createdAt: -1 }); // Sắp xếp bài viết theo thời gian (mới nhất trước)
+            .sort({ createdAt: -1 }); // Sắp xếp bài viết theo thời gian (mới nhất trước)
 
         res.status(200).json(posts); // Trả về danh sách bài viết
     } catch (error) {
@@ -56,7 +64,7 @@ exports.likePost = async (req, res) => {
     try {
         const { postId } = req.body; // Lấy postId từ yêu cầu
         const userId = req.userId; // Lấy userId từ middleware xác thực
-        
+
         // Kiểm tra xem bài viết có tồn tại không
         const post = await Post.findById(postId);
         if (!post) {
@@ -85,7 +93,7 @@ exports.commentPost = async (req, res) => {
     try {
         const { postId, comment } = req.body; // Lấy postId và nội dung comment từ body yêu cầu
         const userId = req.userId; // Lấy userId từ middleware xác thực
-        
+
         // Kiểm tra xem bài viết có tồn tại không
         const post = await Post.findById(postId);
         if (!post) {
@@ -193,13 +201,19 @@ exports.editPost = async (req, res) => {
         if (post.userId.toString() !== userId.toString()) {
             return res.status(403).json({ message: 'You can only edit your own posts' });
         }
+        
 
         // Cập nhật bài viết với các trường mới
         post.content = content || post.content; // Nếu không cung cấp, giữ nguyên giá trị cũ
-        post.image = image || post.image;
         post.video = video || post.video;
         post.visibility = visibility || post.visibility;
-
+        // Cập nhật image nếu có file upload
+        if (req.file) {
+            post.image = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            };
+        }
         // Cập nhật thời gian sửa đổi
         post.updatedAt = Date.now();
 

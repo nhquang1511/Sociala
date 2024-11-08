@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const postSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     content: { type: String, required: true },
-    image: { type: String }, // Link đến hình ảnh nếu có
+    image: {
+        data: Buffer,
+        contentType: String
+    }, // Link đến hình ảnh nếu có
     video: { type: String }, // Link đến video nếu có
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     comments: [
