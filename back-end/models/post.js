@@ -15,9 +15,10 @@ const postSchema = new mongoose.Schema({
     ],
     visibility: {
         type: String,
-        enum: ['public', 'private', 'friends'],
+        enum: ['public', 'private', 'friends','group'],
         default: 'public'
     },
+    groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' }, // ID nhóm (nếu là bài đăng trong nhóm),
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

@@ -134,7 +134,7 @@ exports.getSentRequests = async (req, res) => {
 
         // Tìm tất cả yêu cầu kết bạn mà user hiện tại đã gửi
         const sentRequests = await Friendship.find({ 
-            requester: userId
+            recipient: userId
         }).populate('recipient', 'username email avatar'); // Populate thêm thông tin của recipient
 
         res.status(200).json(sentRequests);

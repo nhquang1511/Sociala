@@ -1,10 +1,30 @@
+// routes/groupRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const groupController = require('../controllers/groupController');
 const authenticateToken = require('../middlewares/authenticateToken');
+const upload = require('../config/multerConfig');
 
+// Tạo nhóm mới
+router.post('/create',authenticateToken, groupController.createGroup);
 
-router.post('/groups',authenticateToken, groupController.createGroup); // Tạo nhóm
+// Thêm thành viên vào nhóm
+router.post('/add-member',authenticateToken, groupController.addMember);
 
+// Xóa thành viên khỏi nhóm
+router.post('/remove-member',authenticateToken, groupController.removeMember);
+
+// Đăng bài trong nhóm
+router.post('/post',authenticateToken, upload.single('image'), groupController.createGroupPost);
+
+// Xem danh sách bài đăng trong nhóm
+router.get('/:groupId/posts',authenticateToken, groupController.getGroupPosts);
+
+// Rời khỏi nhóm
+router.post('/leave',authenticateToken, groupController.leaveGroup);
+
+// Lấy danh sách các nhóm người dùng tham gia
+router.get('/user/groups', authenticateToken ,groupController.getUserGroups); 
 
 module.exports = router;
