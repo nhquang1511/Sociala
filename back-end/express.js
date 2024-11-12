@@ -5,6 +5,8 @@ const userRoutes = require('./routes/userRoutes');
 const friendRoutes = require('./routes/friendRoutes');
 const postRoutes = require('./routes/postRoutes');
 const groupRoutes  = require('./routes/groupRoutes');
+const path = require('path');
+
 
 const corsOptions = {
    origin: '*', // URL của frontend
@@ -38,8 +40,9 @@ app.use(express.urlencoded({ extended: true })); // Xử lý dữ liệu từ fo
 
 // Route cơ bản
 app.get('/', (req, res) => {
-   res.send('Hello, World!');
+   res.sendFile(path.join(__dirname, 'index.html'));
 });
+
 
 app.use('/api/users', userRoutes);
 app.use('/api/friends', friendRoutes);

@@ -49,7 +49,7 @@ exports.getUserPosts = async (req, res) => {
                 { visibility: 'public' }, // Bài viết công khai
                 { userId: userId, visibility: 'friends' } // Bài viết bạn bè
             ]
-        }).populate('userId', 'username') // Lấy thông tin người đăng bài viết
+        }).populate('userId').populate('comments.userId','avatar username') // Lấy thông tin người đăng bài viết
             .sort({ createdAt: -1 }); // Sắp xếp bài viết theo thời gian (mới nhất trước)
 
         res.status(200).json(posts); // Trả về danh sách bài viết
