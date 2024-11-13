@@ -27,4 +27,8 @@ router.post('/leave',authenticateToken, groupController.leaveGroup);
 // Lấy danh sách các nhóm người dùng tham gia
 router.get('/user/groups', authenticateToken ,groupController.getUserGroups); 
 
+router.get('/allgroups', authenticateToken ,groupController.getAllGroups); 
+// cap nhat group
+router.put('/edit-group', authenticateToken,upload.single('avatar'), groupController.updateGroup);
+
 module.exports = router;

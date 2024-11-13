@@ -5,6 +5,7 @@ const groupSchema = new mongoose.Schema({
     description: { type: String },
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    avatar:{type:String},
     privacy: {
         type: String,
         enum: ['public', 'private', 'closed'],

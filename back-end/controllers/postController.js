@@ -1,5 +1,6 @@
 const Post = require('../models/post'); // Mô hình Post
 const User = require('../models/user'); // Mô hình User
+const moment = require('moment');
 
 // API Tạo Bài Viết
 exports.createPost = async (req, res) => {
@@ -52,7 +53,17 @@ exports.getUserPosts = async (req, res) => {
         }).populate('userId').populate('comments.userId','avatar username') // Lấy thông tin người đăng bài viết
             .sort({ createdAt: -1 }); // Sắp xếp bài viết theo thời gian (mới nhất trước)
 
-        res.status(200).json(posts); // Trả về danh sách bài viết
+        // Định dạng thời gian "cách đây bao lâu" cho từng bài viết và từng bình luận
+        const formattedPosts = posts.map(post => ({
+            ...post.toObject(), // Chuyển đổi tài liệu Mongoose sang đối tượng JS thuần túy
+            createdAt: moment(post.createdAt).fromNow(),
+            comments: post.comments.map(comment => ({
+                ...comment.toObject(),
+                createdAt: moment(comment.createdAt).fromNow()
+            }))
+        }));
+
+        res.status(200).json(formattedPosts); // Trả về danh sách bài viết
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error });
@@ -111,7 +122,12 @@ exports.commentPost = async (req, res) => {
         post.comments.push(newComment);
         await post.save(); // Lưu bài viết với bình luận mới
 
-        res.status(201).json(newComment); // Trả về bình luận vừa tạo
+        const formattedComment = {
+            ...newComment,
+            createdAt: moment(newComment.createdAt).fromNow()
+        };
+
+        res.status(201).json(formattedComment); // Trả về bình luận với thời gian "cách đây bao lâu"
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error });

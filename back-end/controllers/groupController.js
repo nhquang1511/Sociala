@@ -163,3 +163,54 @@ exports.getUserGroups = async (req, res) => {
       res.status(500).json({ message: 'Server error', error });
     }
   };
+
+  // Lấy danh sách tất cả các nhóm hiện có
+exports.getAllGroups = async (req, res) => {
+    try {
+        const groups = await Group.find(); // Tìm tất cả các nhóm trong cơ sở dữ liệu
+
+        if (!groups || groups.length === 0) {
+            return res.status(404).json({ message: 'No groups found' });
+        }
+
+        res.status(200).json(groups); // Trả về danh sách tất cả các nhóm
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+// API Cập nhật nhóm
+exports.updateGroup = async (req, res) => {
+    try {
+        const { groupId, name, description, privacy} = req.body;
+        const userId = req.userId; // Lấy userId từ xác thực
+
+        // Tìm nhóm cần cập nhật
+        const group = await Group.findById(groupId);
+        if (!group) return res.status(404).json({ message: 'Group not found'});
+
+        // Kiểm tra quyền của người dùng (người quản trị)
+        if (group.creator.toString() !== userId.toString()) {
+            return res.status(403).json({ message: 'Only the group creator can update the group' });
+        }
+
+        // Cập nhật thông tin nhóm
+        group.name = name || group.name;
+        group.description = description || group.description;
+        group.privacy = privacy || group.privacy;
+
+        // Cập nhật avatar nếu có
+        if (req.file) { // Kiểm tra nếu có file được tải lên
+            group.avatar = req.file.path; // URL trả về từ Cloudinary qua multer
+        }
+
+
+        // Lưu thông tin nhóm đã cập nhật vào cơ sở dữ liệu
+        await group.save();
+
+        res.status(200).json(group); // Trả về nhóm đã cập nhật
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
