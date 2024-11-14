@@ -6,7 +6,7 @@ const friendRoutes = require('./routes/friendRoutes');
 const postRoutes = require('./routes/postRoutes');
 const groupRoutes  = require('./routes/groupRoutes');
 const path = require('path');
-
+const chatRoutes = require('./routes/messageRoutes');
 
 const corsOptions = {
    origin: '*', // URL của frontend
@@ -48,6 +48,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/groups', groupRoutes);
+app.use('/api/chat', chatRoutes); // Prefix /api/chat cho các route chat
 // Khởi động server
 app.listen(PORT, () => {
    console.log(`Server is running on http://localhost:${PORT}`);
