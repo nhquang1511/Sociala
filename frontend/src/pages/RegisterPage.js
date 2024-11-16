@@ -7,7 +7,6 @@ const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [avatar, setAvatar] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('male');
   const [error, setError] = useState('');
@@ -19,7 +18,6 @@ const RegisterPage = () => {
         username,
         email,
         password,
-        avatar,
         dateOfBirth,
         gender
       };

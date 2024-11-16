@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '../components/Header';
 import SidebarLeft from '../components/SidebarLeft';
 import SidebarRight from '../components/SidebarRight';
-import Feed from '../components/Feed';
+import ListPost from '../components/ListPost'; // Đảm bảo ListPost được import
 import '../styles/HomePage.css';
 
 const HomePage = () => {
@@ -12,7 +12,10 @@ const HomePage = () => {
       <Header />
       <div className="homepage-content">
         <SidebarLeft />
-        <Feed />
+        <div className="center-column">
+          {/* Chỉ render ListPost ở giữa */}
+          <ListPost />
+        </div>
         <SidebarRight />
       </div>
     </div>
