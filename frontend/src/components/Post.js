@@ -1,6 +1,5 @@
 // src/components/Post.js
 import React from 'react';
-import moment from 'moment';
 import '../styles/Post.css';
 
 const Post = ({ post }) => {
@@ -14,7 +13,7 @@ const Post = ({ post }) => {
         />
         <div className="post-header-info">
           <span className="username">{post.userId.username}</span>
-          <span className="post-time">{moment(post.createdAt).fromNow()}</span>
+          <span className="post-time">{post.createdAt}</span>
         </div>
       </div>
       <div className="post-content">
