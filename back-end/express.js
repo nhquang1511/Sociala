@@ -9,7 +9,7 @@ const path = require('path');
 const chatRoutes = require('./routes/messageRoutes');
 
 const corsOptions = {
-   origin: '*', // URL của frontend
+   origin: 'http://localhost:3000', // URL của frontend
    credentials: true, // Cho phép cookie
 };
 
