@@ -23,15 +23,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.feed {
-  width: 55%;
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-left: 10px;
-  margin-right: 10px;
-}
+
 
 /* Header container */
 .header {

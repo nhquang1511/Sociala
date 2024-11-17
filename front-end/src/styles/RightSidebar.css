@@ -1,0 +1,18 @@
+.rightSidebar {
+    width: 30%;
+    padding: 20px;
+  }
+  
+  .rightSidebar h4 {
+    margin-bottom: 10px;
+  }
+  
+  .rightSidebar ul {
+    list-style: none;
+  }
+  
+  .rightSidebar li {
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  
