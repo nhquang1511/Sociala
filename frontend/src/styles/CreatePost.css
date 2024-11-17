@@ -1,88 +1,17 @@
-/* src/components/CreatePost.css */
-.create-post {
-    background-color: white;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    margin: 20px 0 20px 0; /* Đảm bảo khoảng cách với các phần tử khác */
-    width: 100%;
-    max-width: 520px; /* Giới hạn chiều rộng giống với ListPost */
-    margin-left: auto; /* Căn giữa */
-    margin-right: auto; /* Căn giữa */
-}
-
 .create-post textarea {
-    width: 80%;
-    height: 100px;
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     margin-bottom: 10px;
-    resize: none;
-}
-
-.create-post input[type="file"] {
-    display: block;
-    margin: 10px 0;
-    width: 100%; /* Đảm bảo khớp với chiều rộng */
-}
-
-.create-post button {
-    background-color: #1877f2;
+  }
+  
+  .create-post button {
+    padding: 10px;
+    background-color: #4267b2;
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    width: 100%; /* Đảm bảo nút bấm chiếm chiều rộng */
-}
-
-.create-post button:hover {
-    background-color: #156ac2;
-}
-
-/* Điều chỉnh kiểu dáng của tạo bài post sao cho giống với ListPost */
-.create-post .post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.create-post .post-header .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.create-post .post-header .post-header-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.create-post .post-header .username {
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.create-post .post-header .post-time {
-    font-size: 12px;
-    color: #606770;
-}
-
-.create-post .post-content {
-    margin-top: 10px;
-}
-
-.create-post .post-content p {
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-.create-post .post-content .post-image {
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 8px;
-}
+  }
+  

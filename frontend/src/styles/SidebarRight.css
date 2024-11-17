@@ -1,51 +1,11 @@
-/* Sidebar Right Styling */
 .sidebar-right {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  height: fit-content;
-}
-
-/* Sidebar Heading */
-.sidebar-right h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #1877f2;
-}
-
-/* Section within Sidebar */
-.sidebar-section {
-  margin-bottom: 20px;
-}
-
-/* Link Items in Sidebar Right */
-.sidebar-link-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 8px 0;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.sidebar-link-item:hover {
-  background-color: #f0f2f5;
-}
-
-.sidebar-link-item .sidebar-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-}
-
-.sidebar-link-item span {
-  font-size: 14px;
-  font-weight: 500;
-  color: #606770;
-}
-
-.sidebar-link-item span:hover {
-  color: #1877f2;
-}
+    width: 20%;
+    background-color: #f0f2f5;
+    padding: 10px;
+  }
+  
+  .sidebar-right ul {
+    list-style: none;
+    padding: 0;
+  }
+  

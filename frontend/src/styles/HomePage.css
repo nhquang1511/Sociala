@@ -1,60 +1,11 @@
-/* src/styles/HomePage.css */
 .homepage {
-  display: flex;
-  flex-direction: column;
-}
-
-.homepage-content {
-  display: flex;
-  margin-top: 20px;
-  justify-content: center; /* Để căn giữa phần content */
-  flex: 1;
-}
-
-.sidebar-left, .sidebar-right {
-  width: 250px; /* Chiều rộng cố định cho sidebar */
-}
-
-.center-column {
-  flex: 1; /* Phần giữa sẽ chiếm toàn bộ không gian còn lại */
-  max-width: 800px; /* Giới hạn chiều rộng của phần content giữa */
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* src/styles/HomePage.css */
-
-/* Cố định Sidebar trái (ở bên trái màn hình) */
-.sidebar-left {
-  position: fixed; /* Cố định vị trí */
-  top: 1;
-  left: 0;
-  width: 200px; /* Chiều rộng của sidebar */
-  height: 100%; /* Chiều cao đầy đủ của màn hình */
-  overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
-  background-color: #f0f2f5; /* Màu nền của sidebar */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);/* Tạo bóng đổ cho sidebar*/
-  z-index: 1000; /* Đảm bảo sidebar luôn hiển thị phía trên nội dung */
-}
-
-/* Cố định Sidebar phải (ở bên phải màn hình) */
-.sidebar-right {
-  position: fixed; /* Cố định vị trí */
-  top: 50;
-  right: 0;
-  width: 200px; /* Chiều rộng của sidebar */
-  height: 100%; /* Chiều cao đầy đủ của màn hình */
-  overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
-  background-color: #f0f2f5; /* Màu nền của sidebar */
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Tạo bóng đổ cho sidebar */
-  z-index: 1000; /* Đảm bảo sidebar luôn hiển thị phía trên nội dung */
-}
-
-/* Điều chỉnh phần nội dung chính (homepage-content) để không bị che bởi các sidebar */
-.homepage-content {
-  margin-left: 350px; /* Đẩy phần content ra khỏi sidebar trái */
-  margin-right: 350px; /* Đẩy phần content ra khỏi sidebar phải */
-  padding-top: 0px; /* Tạo khoảng cách ở phía trên */
-}
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .homepage-content {
+    display: flex;
+    flex: 1;
+  }
+  
