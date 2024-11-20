@@ -64,21 +64,36 @@ exports.getMessages = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
-// / trả về danh sách các cuộc trò chuyện của người dùng hiện tại.
-exports.getUserChats = async (req, res) => {
+
+// Lấy danh sách những người đã nhắn tin với người dùng hiện tại
+exports.getChatUsers = async (req, res) => {
     try {
-        const userId = req.userId; // Lấy userId từ middleware xác thực
+        const currentUserId = req.userId; // Lấy userId của người dùng hiện tại từ middleware xác thực
 
-        // Lấy danh sách các người dùng đã trò chuyện với người dùng hiện tại
-        const chats = await Message.aggregate([
-            { $match: { $or: [{ senderId: userId }, { receiverId: userId }] } },
-            { $group: { _id: { $cond: [{ $eq: ['$senderId', userId] }, '$receiverId', '$senderId'] } } }
-        ]);
+        // Tìm tất cả các tin nhắn mà người dùng hiện tại là người gửi hoặc người nhận
+        const messages = await Message.find({
+            $or: [
+                { senderId: currentUserId },
+                { receiverId: currentUserId }
+            ]
+        });
 
-        // Trả về danh sách cuộc trò chuyện (người dùng đã trò chuyện)
-        res.status(200).json(chats);
+        // Trích xuất danh sách userId từ tin nhắn
+        const userIds = messages.flatMap(msg => 
+            msg.senderId.toString() === currentUserId 
+                ? msg.receiverId.toString() 
+                : msg.senderId.toString()
+        );
+
+        // Loại bỏ trùng lặp trong danh sách userId
+        const uniqueUserIds = [...new Set(userIds)];
+
+        // Lấy thông tin chi tiết của những người dùng này
+        const users = await User.find({ _id: { $in: uniqueUserIds } }).select('username avatar email');
+
+        res.status(200).json(users);
     } catch (error) {
-        console.error(error);
+        console.error('Error getting chat users:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };

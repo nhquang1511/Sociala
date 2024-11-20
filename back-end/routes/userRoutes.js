@@ -21,5 +21,6 @@ router.put('/:id',authenticateToken ,upload.single('avatar'), userController.upd
 // Xóa người dùng theo ID
 router.delete('/:id',authenticateToken, userController.deleteUser);
 
-
+// Tìm kiếm cả người dùng và nhóm
+router.get('/search/:query',authenticateToken, userController.search);
 module.exports = router;

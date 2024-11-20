@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { sendMessage, getMessages, getUserChats } = require('../controllers/messageController');
+const messageController = require('../controllers/messageController');
 const authenticate = require('../middlewares/authenticateToken'); // Middleware xác thực người dùng
 
 // Route gửi tin nhắn
-router.post('/send', authenticate, sendMessage); // Middleware authenticate để kiểm tra người dùng
+router.post('/send', authenticate, messageController.sendMessage); // Middleware authenticate để kiểm tra người dùng
 
 // Route lấy tin nhắn giữa hai người dùng
-router.get('/messages/:userId', authenticate, getMessages);
+router.get('/messages/:userId', authenticate, messageController.getMessages);
 
-// Route lấy danh sách các cuộc trò chuyện của người dùng
-router.get('/chats', authenticate, getUserChats);
+// Lấy danh sách những người đã nhắn tin với người dùng hiện tại
+router.get('/chats',authenticate, messageController.getChatUsers);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Group = require('../models/group');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -132,3 +133,43 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
+
+
+
+// API tìm kiếm cả người dùng và nhóm
+exports.search = async (req, res) => {
+  try {
+    const { query } = req.params; // Nhận từ khóa tìm kiếm từ query params
+
+    // Kiểm tra xem query có tồn tại không
+    if (!query) {
+      return res.status(400).json({ message: 'Search query is required' });
+    }
+
+    // Tìm kiếm người dùng (username, email, hoặc phone)
+    const userResults = await User.find({
+      $or: [
+        { username: { $regex: query, $options: 'i' } },
+        { email: { $regex: query, $options: 'i' } },
+        { phone: { $regex: query, $options: 'i' } }
+      ]
+    }).select('-password'); // Loại bỏ trường password
+
+    // Tìm kiếm nhóm (name hoặc description)
+    const groupResults = await Group.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } }
+      ]
+    });
+
+    // Kết hợp kết quả
+    res.status(200).json({
+      users: userResults,
+      groups: groupResults,
+    });
+  } catch (error) {
+    console.error('Error searching:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
