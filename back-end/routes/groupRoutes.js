@@ -31,4 +31,8 @@ router.get('/allgroups', authenticateToken ,groupController.getAllGroups);
 // cap nhat group
 router.put('/edit-group', authenticateToken,upload.single('avatar'), groupController.updateGroup);
 
+// join nhóm 
+router.post('/join', authenticateToken, groupController.joinGroup);
+
+
 module.exports = router;

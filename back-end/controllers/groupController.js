@@ -214,3 +214,34 @@ exports.updateGroup = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+// Tham gia nhóm
+exports.joinGroup = async (req, res) => {
+    try {
+        const { groupId } = req.body; // Lấy ID nhóm từ yêu cầu
+        const userId = req.userId;   // Lấy ID người dùng từ middleware xác thực
+
+        // Tìm nhóm theo ID
+        const group = await Group.findById(groupId);
+        if (!group) return res.status(404).json({ message: 'Group not found' });
+
+        // Kiểm tra xem người dùng đã là thành viên chưa
+        if (group.members.includes(userId)) {
+            return res.status(400).json({ message: 'You are already a member of this group' });
+        }
+
+        // Kiểm tra quyền riêng tư của nhóm
+        if (group.privacy === 'private') {
+            return res.status(403).json({ message: 'Cannot join a private group without an invitation' });
+        }
+
+        // Thêm người dùng vào danh sách thành viên
+        group.members.push(userId);
+        await group.save();
+
+        res.status(200).json({ message: 'You have successfully joined the group', group });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
