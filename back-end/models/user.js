@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     avatar: { type: String },
     dateOfBirth: { type: Date },
     phone:{type:String} , // Thuộc tính ngày sinh
-    gender: { type: String, enum: ['male', 'female', 'other'] }  // Thuộc tính giới tính
+    gender: { type: String, enum: ['male', 'female', 'other'] },  // Thuộc tính giới tính
 });
 
 module.exports = mongoose.model('User', userSchema);

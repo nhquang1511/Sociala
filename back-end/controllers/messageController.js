@@ -1,6 +1,7 @@
 const Message = require('../models/message');
 const User = require('../models/user'); // Mô hình người dùng
 const Friendship = require('../models/Friendship');
+const Notification = require('../models/Notification');
 // Gửi tin nhắn
 exports.sendMessage = async (req, res) => {
     try {
@@ -34,6 +35,22 @@ exports.sendMessage = async (req, res) => {
 
         // Lưu tin nhắn vào cơ sở dữ liệu
         await newMessage.save();
+
+         // Tạo thông báo cho người tạo bài viết
+         const user = await User.findById(senderId).select('username'); // Lấy trường 'name' của người dùng
+
+
+        // **Tạo thông báo**
+        const newNotification = new Notification({
+            userId: receiverId, // Người nhận thông báo
+            type: 'new_message', // Loại thông báo
+            message: `${receiver.username}, bạn vừa nhận được một tin nhắn mới từ ${user.username}`, // Nội dung thông báo
+            createdAt: new Date(),
+            isRead: false // Đánh dấu thông báo chưa được đọc
+        });
+
+        // Lưu thông báo vào cơ sở dữ liệu
+        await newNotification.save();
 
         // Trả về tin nhắn vừa tạo
         res.status(201).json(newMessage);

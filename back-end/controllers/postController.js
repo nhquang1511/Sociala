@@ -1,6 +1,7 @@
 const Post = require('../models/post'); // Mô hình Post
 const User = require('../models/user'); // Mô hình User
 const moment = require('moment');
+const { createNotification,sendNotificationsToFriends } = require('./notificationController');
 
 // API Tạo Bài Viết
 exports.createPost = async (req, res) => {
@@ -26,12 +27,12 @@ exports.createPost = async (req, res) => {
             visibility
         });
         
-          
-
-        
-
         // Lưu bài viết vào cơ sở dữ liệu
         await newPost.save();
+
+        // Gửi thông báo cho bạn bè
+        await sendNotificationsToFriends(userId, newPost);
+
         res.status(201).json(newPost); // Trả về bài viết vừa tạo
     } catch (error) {
         console.error(error);
@@ -91,6 +92,19 @@ exports.likePost = async (req, res) => {
         post.likes.push(userId);
         await post.save();
 
+        // Tạo thông báo cho người tạo bài viết
+        const user = await User.findById(userId).select('username'); // Lấy trường 'name' của người dùng
+
+
+        if (post.userId._id.toString() !== userId.toString()) {
+            await createNotification({
+                userId: post.userId._id,
+                type: 'like',
+                message: `${user.username} đã thích bài viết của bạn.`,
+                postId
+            });
+        }
+
         res.status(201).json({ message: 'Post liked successfully' });
     } catch (error) {
         console.error(error);
@@ -121,6 +135,19 @@ exports.commentPost = async (req, res) => {
         // Thêm bình luận vào bài viết
         post.comments.push(newComment);
         await post.save(); // Lưu bài viết với bình luận mới
+
+        // Tạo thông báo cho người tạo bài viết
+
+        // Tạo thông báo cho người tạo bài viết
+        const user = await User.findById(userId).select('username'); // Lấy trường 'name' của người dùng
+        if (post.userId._id.toString() !== userId.toString()) {
+            await createNotification({
+                userId: post.userId._id,
+                type: 'comment',
+                message: `${user.userName} đã bình luận bài viết của bạn.`,
+                postId
+            });
+        }
 
         const formattedComment = {
             ...newComment,
