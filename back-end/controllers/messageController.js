@@ -1,6 +1,7 @@
 const Message = require('../models/message');
 const User = require('../models/user'); // Mô hình người dùng
 const Friendship = require('../models/Friendship');
+const moment = require('moment');
 const Notification = require('../models/Notification');
 // Gửi tin nhắn
 exports.sendMessage = async (req, res) => {
@@ -74,8 +75,16 @@ exports.getMessages = async (req, res) => {
             ]
         })
             .sort({ createdAt: 1 }); // Sắp xếp theo thời gian gửi (cũ nhất trước)
+        // Định dạng lại createdAt của mỗi tin nhắn
+        const formattedMessages = messages.map(message => {
+            return {
+                ...message.toObject(),
+                createdAt: moment(message.createdAt).fromNow() // Định dạng ngày giờ
+            };
+        });
 
-        res.status(200).json(messages); // Trả về danh sách tin nhắn
+        res.status(200).json(formattedMessages);
+       
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error });
