@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 // Đăng ký người dùng mới
 exports.register = async (req, res) => {
   try {
-    const { username, email, password, avatar, dateOfBirth, gender } = req.body;
+    const { username, email, password, avatar, dateOfBirth, gender,role } = req.body;
 
     // Kiểm tra xem email đã tồn tại chưa
     const existingUser = await User.findOne({ email });
@@ -24,7 +24,8 @@ exports.register = async (req, res) => {
       password: hashedPassword,
       avatar,
       dateOfBirth,
-      gender
+      gender,
+      role
     });
     
     await newUser.save();

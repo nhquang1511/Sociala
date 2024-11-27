@@ -8,6 +8,9 @@ const groupRoutes  = require('./routes/groupRoutes');
 const path = require('path');
 const chatRoutes = require('./routes/messageRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+
+
 
 const corsOptions = {
    origin: 'http://localhost:3000', // URL của frontend
@@ -53,7 +56,7 @@ app.use('/api/chat', chatRoutes); // Prefix /api/chat cho các route chat
 
 app.use('/api/notification', notificationRoutes);
 
-
+app.use('/api/admin', adminRoutes);
 
 // Khởi động server
 app.listen(PORT, () => {
