@@ -23,7 +23,7 @@ router.delete('/messages/:messageId',authenticateToken, adminMiddleware, AdminCo
 
 // Notification routes
 router.get('/notifications',authenticateToken, adminMiddleware, AdminController.getAllNotifications);
-router.delete('/notifications/:notificationId', adminMiddleware, AdminController.deleteNotification);
+router.delete('/notifications/:notificationId',authenticateToken, adminMiddleware, AdminController.deleteNotification);
 
 // Friendship routes
 router.get('/friendships',authenticateToken, adminMiddleware, AdminController.getAllFriendships);
