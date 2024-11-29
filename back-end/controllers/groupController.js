@@ -151,7 +151,7 @@ exports.getUserGroups = async (req, res) => {
       const userId = req.userId; // Lấy userId từ middleware xác thực người dùng
   
       // Tìm tất cả các nhóm mà người dùng tham gia
-      const groups = await Group.find({ members: userId });
+      const groups = await Group.find({ members: userId }).populate('creator', 'username email avatar').populate('members', 'username email avatar');
   
       if (!groups || groups.length === 0) {
         return res.status(404).json({ message: 'No groups found for this user' });
@@ -167,7 +167,7 @@ exports.getUserGroups = async (req, res) => {
   // Lấy danh sách tất cả các nhóm hiện có
 exports.getAllGroups = async (req, res) => {
     try {
-        const groups = await Group.find(); // Tìm tất cả các nhóm trong cơ sở dữ liệu
+        const groups = await Group.find().populate('creator', 'username email avatar').populate('members', 'username email avatar'); // Tìm tất cả các nhóm trong cơ sở dữ liệu
 
         if (!groups || groups.length === 0) {
             return res.status(404).json({ message: 'No groups found' });
