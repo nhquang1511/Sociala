@@ -2,11 +2,12 @@ const User = require('../models/user');
 const Group = require('../models/group');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const moment = require('moment'); 
 
 // Đăng ký người dùng mới
 exports.register = async (req, res) => {
   try {
-    const { username, email, password, avatar, dateOfBirth, gender,role } = req.body;
+    const { username, email, password, phone, dateOfBirth,  avatar, gender,role } = req.body;
 
     // Kiểm tra xem email đã tồn tại chưa
     const existingUser = await User.findOne({ email });
@@ -22,9 +23,10 @@ exports.register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      avatar,
+     avatar,
       dateOfBirth,
       gender,
+      phone,
       role
     });
     
@@ -69,8 +71,15 @@ exports.getUser = async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    // Định dạng ngày sinh với moment
+    const formattedUser = {
+      ...user._doc,
+      dateOfBirth: user.dateOfBirth ? moment(user.dateOfBirth).format('DD/MM/YYYY') : null
+    };
 
-    res.json(user);
+    
+    res.json(formattedUser);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }

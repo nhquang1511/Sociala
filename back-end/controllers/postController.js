@@ -1,6 +1,7 @@
 const Post = require('../models/post'); // Mô hình Post
 const User = require('../models/user'); // Mô hình User
 const moment = require('moment');
+const Friendship = require('../models/Friendship'); // Import model Friendship
 const { createNotification,sendNotificationsToFriends } = require('./notificationController');
 
 // API Tạo Bài Viết
@@ -39,24 +40,39 @@ exports.createPost = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
-// API Lấy Danh Sách Bài Viết của Người Dùng
+
+
 exports.getUserPosts = async (req, res) => {
     try {
         const userId = req.userId; // Lấy userId từ middleware xác thực
 
-        // Lấy danh sách bài viết của người dùng với điều kiện visibility
+        // Lấy danh sách bạn bè của người dùng hiện tại từ collection Friendship
+        const friendships = await Friendship.find({ 
+            $or: [
+                { requester: userId, status: 'accepted' },
+                { recipient: userId, status: 'accepted' }
+            ]
+        });
+
+        // Tạo danh sách bạn bè từ kết quả truy vấn
+        const friendsList = friendships.map(friendship => 
+            friendship.requester.toString() === userId ? friendship.recipient.toString() : friendship.requester.toString()
+        );
+
+        // Lấy bài viết dựa trên visibility
         const posts = await Post.find({
             $or: [
-                { userId: userId, visibility: 'private' }, // Bài viết riêng tư của người dùng
+                { userId: userId }, // Bài viết của chính người dùng
                 { visibility: 'public' }, // Bài viết công khai
-                { userId: userId, visibility: 'friends' } // Bài viết bạn bè
+                { visibility: 'friends', userId: { $in: friendsList } } // Bài viết bạn bè
             ]
-        }).populate('userId').populate('comments.userId','avatar username') // Lấy thông tin người đăng bài viết
-            .sort({ createdAt: -1 }); // Sắp xếp bài viết theo thời gian (mới nhất trước)
+        }).populate('userId')
+          .populate('comments.userId', 'avatar username')
+          .sort({ createdAt: -1 });
 
-        // Định dạng thời gian "cách đây bao lâu" cho từng bài viết và từng bình luận
+        // Định dạng thời gian và trả về kết quả
         const formattedPosts = posts.map(post => ({
-            ...post.toObject(), // Chuyển đổi tài liệu Mongoose sang đối tượng JS thuần túy
+            ...post.toObject(),
             createdAt: moment(post.createdAt).fromNow(),
             comments: post.comments.map(comment => ({
                 ...comment.toObject(),
@@ -64,7 +80,7 @@ exports.getUserPosts = async (req, res) => {
             }))
         }));
 
-        res.status(200).json(formattedPosts); // Trả về danh sách bài viết
+        res.status(200).json(formattedPosts);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error });
