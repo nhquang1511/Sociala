@@ -45,32 +45,32 @@ exports.getUserPosts = async (req, res) => {
     try {
         const userId = req.userId; // Lấy userId từ middleware xác thực
 
-        // Lấy danh sách bạn bè của người dùng hiện tại từ collection Friendship
+        // Lấy danh sách bạn bè của người dùng
+        const friendships = await Friendship.find({
+            $or: [
+                { requester: userId, status: 'accepted' },
+                { recipient: userId, status: 'accepted' }
+            ]
+        });
+
         const friendIds = friendships.map(friendship => 
             friendship.requester.toString() === userId ? friendship.recipient : friendship.requester
         );
 
         // Lấy danh sách bài viết của người dùng với điều kiện visibility
-        // Tạo danh sách bạn bè từ kết quả truy vấn
-        const friendsList = friendships.map(friendship => 
-            friendship.requester.toString() === userId ? friendship.recipient.toString() : friendship.requester.toString()
-        );
-
-        // Lấy bài viết dựa trên visibility
         const posts = await Post.find({
             $or: [
-                { userId: userId }, // Bài viết của chính người dùng
+                { userId: userId, visibility: 'private' }, // Bài viết riêng tư của người dùng
                 { visibility: 'public' }, // Bài viết công khai
-                { visibility: 'friends', userId: { $in: friendsList } } // Bài viết bạn bè
+                { userId: userId, visibility: 'friends' }, // Bài viết bạn bè của người dùng
+                { userId: { $in: friendIds }, visibility: 'friends' } // Bài viết bạn bè của bạn bè
             ]
-        }).populate('userId')
-          .populate('comments.userId', 'avatar username')
-          .sort({ createdAt: -1 });
+        }).populate('userId').populate('comments.userId', 'avatar username') // Lấy thông tin người đăng bài viết
+            .sort({ createdAt: -1 }); // Sắp xếp bài viết theo thời gian (mới nhất trước)
 
-
-        // Định dạng thời gian và trả về kết quả
+        // Định dạng thời gian "cách đây bao lâu" cho từng bài viết và từng bình luận
         const formattedPosts = posts.map(post => ({
-            ...post.toObject(),
+            ...post.toObject(), // Chuyển đổi tài liệu Mongoose sang đối tượng JS thuần túy
             createdAt: moment(post.createdAt).fromNow(),
             comments: post.comments.map(comment => ({
                 ...comment.toObject(),
@@ -78,12 +78,13 @@ exports.getUserPosts = async (req, res) => {
             }))
         }));
 
-        res.status(200).json(formattedPosts);
+        res.status(200).json(formattedPosts); // Trả về danh sách bài viết
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
 
 
 // API Like Bài Viết
