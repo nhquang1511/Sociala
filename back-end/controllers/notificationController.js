@@ -11,7 +11,6 @@ exports.createNotification = async ({ userId, type, message, postId = null }) =>
             message,
             postId
         });
-
         await notification.save();
         return notification;
     } catch (error) {
