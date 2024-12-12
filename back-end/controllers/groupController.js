@@ -1,5 +1,6 @@
 const Group = require('../models/group');
 const Post = require('../models/post');
+const moment = require('moment');
 
 // Tạo nhóm mới
 exports.createGroup = async (req, res) => {
@@ -114,7 +115,18 @@ exports.getGroupPosts = async (req, res) => {
         }
 
         const posts = await Post.find({ groupId });
-        res.status(200).json(posts);
+        
+        // Định dạng thời gian "cách đây bao lâu" cho từng bài viết và từng bình luận
+        const formattedPosts = posts.map(post => ({
+            ...post.toObject(), // Chuyển đổi tài liệu Mongoose sang đối tượng JS thuần túy
+            createdAt: moment(post.createdAt).fromNow(),
+            comments: post.comments.map(comment => ({
+                ...comment.toObject(),
+                createdAt: moment(comment.createdAt).fromNow()
+            }))
+        }));
+
+        res.status(200).json(formattedPosts);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error });
