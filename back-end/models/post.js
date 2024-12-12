@@ -4,8 +4,7 @@ const postSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     content: { type: String, required: true },
     image: { type: String },
-    video: { type: String }, // Link đến video nếu có
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     comments: [
         {
             userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
